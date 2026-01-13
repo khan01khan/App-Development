@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_light">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardCornerRadius="12dp"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/splash_background" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/overlay_dark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="50% OFF TODAY!"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categories"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            android:layout_marginBottom="10dp"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button style="@style/Widget.MaterialComponents.Button.TextButton" android:id="@+id/catAll" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="All" android:textColor="@color/colorPrimary"/>
+                <Button style="@style/Widget.MaterialComponents.Button.TextButton" android:id="@+id/catFastFood" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fast Food" android:textColor="@color/gray_dark"/>
+                <Button style="@style/Widget.MaterialComponents.Button.TextButton" android:id="@+id/catMain" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Main Course" android:textColor="@color/gray_dark"/>
+                <Button style="@style/Widget.MaterialComponents.Button.TextButton" android:id="@+id/catSides" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Sides" android:textColor="@color/gray_dark"/>
+                <Button style="@style/Widget.MaterialComponents.Button.TextButton" android:id="@+id/catDessert" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dessert" android:textColor="@color/gray_dark"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popular Items"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/gray_dark"
+            android:layout_marginBottom="10dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPopular"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+    </LinearLayout>
+</ScrollView>

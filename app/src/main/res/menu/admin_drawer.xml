@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_admin_dash"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Dashboard" />
+        <item
+            android:id="@+id/nav_manage_menu"
+            android:icon="@android:drawable/ic_menu_edit"
+            android:title="Manage Menu" />
+        <item
+            android:id="@+id/nav_manage_orders"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Manage Orders" />
+        <item
+            android:id="@+id/nav_manage_users"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Manage Users" />
+    </group>
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Logout" />
+        </menu>
+    </item>
+</menu>
