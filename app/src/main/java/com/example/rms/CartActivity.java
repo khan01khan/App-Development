@@ -33,21 +33,33 @@ public class CartActivity extends AppCompatActivity {
         btnPlaceOrder.setOnClickListener(v -> {
             if (DataManager.cart.isEmpty()) {
                 Toast.makeText(CartActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
+            } else if (DataManager.currentUser == null) {
+                Toast.makeText(CartActivity.this, "Please login to place order", Toast.LENGTH_SHORT).show();
             } else {
-                // Create New Order
-                String orderId = "ORD" + System.currentTimeMillis();
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                double total = calculateTotal();
-                
-                Order newOrder = new Order(orderId, DataManager.currentUser.getUsername(), 
-                        DataManager.cart, total, date);
-                DataManager.orders.add(newOrder);
-
-                Toast.makeText(CartActivity.this, "Order Placed! ID: " + orderId, Toast.LENGTH_LONG).show();
-                DataManager.cart.clear();
-                finish();
+                placeOrderLocally();
             }
         });
+    }
+
+    private void placeOrderLocally() {
+        String orderId = "ORD" + System.currentTimeMillis();
+        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
+        double total = calculateTotal();
+        
+        // Fix: Ensuring parameters match the Order(id, username, items, total, date) constructor
+        Order newOrder = new Order(
+            orderId, 
+            DataManager.currentUser.getUsername(), 
+            DataManager.cart, 
+            total, 
+            date
+        );
+
+        DataManager.orders.add(newOrder);
+        Toast.makeText(CartActivity.this, "Order Placed! ID: " + orderId, Toast.LENGTH_LONG).show();
+        DataManager.cart.clear();
+        updateTotalBill();
+        finish();
     }
 
     private void setupRecyclerView() {

@@ -6,18 +6,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class AddEditMenuActivity extends AppCompatActivity {
 
     private TextInputEditText etName, etPrice, etCategory;
     private Button btnSave;
     private TextView tvTitle;
-    private int position = -1;
+    private String itemId = null;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_menu);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("menu");
 
         etName = findViewById(R.id.etName);
         etPrice = findViewById(R.id.etPrice);
@@ -25,40 +30,48 @@ public class AddEditMenuActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         tvTitle = findViewById(R.id.tvTitle);
 
-        if (getIntent().hasExtra("position")) {
-            position = getIntent().getIntExtra("position", -1);
-            MenuItem item = DataManager.menuItems.get(position);
-            etName.setText(item.getName());
-            etPrice.setText(String.valueOf(item.getPrice()));
-            etCategory.setText(item.getCategory());
+        if (getIntent().hasExtra("itemId")) {
+            itemId = getIntent().getStringExtra("itemId");
             tvTitle.setText("Edit Menu Item");
+            loadItemDetails();
         }
 
-        btnSave.setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String priceStr = etPrice.getText().toString().trim();
-            String category = etCategory.getText().toString().trim();
+        btnSave.setOnClickListener(v -> saveItem());
+    }
 
-            if (name.isEmpty() || priceStr.isEmpty() || category.isEmpty()) {
-                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                return;
+    private void loadItemDetails() {
+        mDatabase.child(itemId).get().addOnSuccessListener(snapshot -> {
+            MenuItem item = snapshot.getValue(MenuItem.class);
+            if (item != null) {
+                etName.setText(item.getName());
+                etPrice.setText(String.valueOf(item.getPrice()));
+                etCategory.setText(item.getCategory());
             }
+        });
+    }
 
-            double price = Double.parseDouble(priceStr);
+    private void saveItem() {
+        String name = etName.getText().toString().trim();
+        String priceStr = etPrice.getText().toString().trim();
+        String category = etCategory.getText().toString().trim();
 
-            if (position == -1) {
-                // Add new item - use a default logo for new items
-                DataManager.menuItems.add(new MenuItem(name, price, R.drawable.ic_restaurant_logo, category));
-                Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                // Update existing
-                MenuItem item = DataManager.menuItems.get(position);
-                item.setName(name);
-                item.setPrice(price);
-                item.setCategory(category);
-                Toast.makeText(this, "Item updated successfully", Toast.LENGTH_SHORT).show();
+        if (name.isEmpty() || priceStr.isEmpty() || category.isEmpty()) {
+            Toast.makeText(this, "Fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double price = Double.parseDouble(priceStr);
+        
+        if (itemId == null) {
+            itemId = mDatabase.push().getKey();
+        }
+
+        MenuItem item = new MenuItem(itemId, name, price, R.drawable.ic_restaurant_logo, category);
+        mDatabase.child(itemId).setValue(item).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(this, "Saved successfully", Toast.LENGTH_SHORT).show();
+                finish();
             }
-            finish();
         });
     }
 }
