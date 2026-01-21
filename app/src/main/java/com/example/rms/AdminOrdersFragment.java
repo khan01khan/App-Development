@@ -24,7 +24,13 @@ public class AdminOrdersFragment extends Fragment {
         adapter = new OrderAdapter(DataManager.orders, true, new OrderAdapter.OnOrderActionListener() {
             @Override
             public void onAction(int position, String newStatus) {
-                DataManager.orders.get(position).setStatus(newStatus);
+                Order order = DataManager.orders.get(position);
+                order.setStatus(newStatus);
+                
+                // Show notification for status change
+                NotificationHelper.showNotification(getContext(), "Order Status Updated", 
+                    "Order " + order.getOrderId() + " is now " + newStatus);
+                
                 adapter.notifyItemChanged(position);
             }
         });

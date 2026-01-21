@@ -46,7 +46,6 @@ public class CartActivity extends AppCompatActivity {
         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(new Date());
         double total = calculateTotal();
         
-        // Fix: Ensuring parameters match the Order(id, username, items, total, date) constructor
         Order newOrder = new Order(
             orderId, 
             DataManager.currentUser.getUsername(), 
@@ -56,6 +55,10 @@ public class CartActivity extends AppCompatActivity {
         );
 
         DataManager.orders.add(newOrder);
+        
+        // Show Pop Notification
+        NotificationHelper.showNotification(this, "Order Placed Successfully", "Your order " + orderId + " has been placed. Total: Rs. " + total);
+        
         Toast.makeText(CartActivity.this, "Order Placed! ID: " + orderId, Toast.LENGTH_LONG).show();
         DataManager.cart.clear();
         updateTotalBill();

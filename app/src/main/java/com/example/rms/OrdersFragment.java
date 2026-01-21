@@ -20,14 +20,39 @@ public class OrdersFragment extends Fragment {
 
         RecyclerView rvOrders = view.findViewById(R.id.rvOrders);
         
-        ArrayList<Order> userOrders = new ArrayList<>();
-        for (Order o : DataManager.orders) {
-            if (o.getCustomerUsername().equals(DataManager.currentUser.getUsername())) {
-                userOrders.add(o);
+        boolean isAdmin = DataManager.currentUser != null && DataManager.currentUser.isAdmin();
+        ArrayList<Order> displayOrders = new ArrayList<>();
+
+        if (isAdmin) {
+            // Admin sees all orders (History of all customer orders)
+            displayOrders.addAll(DataManager.orders);
+        } else {
+            // Regular user sees only their orders
+            for (Order o : DataManager.orders) {
+                if (DataManager.currentUser != null && o.getCustomerUsername().equals(DataManager.currentUser.getUsername())) {
+                    displayOrders.add(o);
+                }
             }
         }
 
-        OrderAdapter adapter = new OrderAdapter(userOrders, false, null);
+        OrderAdapter adapter = new OrderAdapter(displayOrders, isAdmin, (position, newStatus) -> {
+            Order order = displayOrders.get(position);
+            order.setStatus(newStatus);
+            
+            // Show notification for status change
+            NotificationHelper.showNotification(getContext(), "Order Status Updated", 
+                "Order " + order.getOrderId() + " is now " + newStatus);
+
+            // Find the order in DataManager.orders and update it there as well if they are different lists
+            for (Order o : DataManager.orders) {
+                if (o.getOrderId().equals(order.getOrderId())) {
+                    o.setStatus(newStatus);
+                    break;
+                }
+            }
+            rvOrders.getAdapter().notifyItemChanged(position);
+        });
+        
         rvOrders.setLayoutManager(new LinearLayoutManager(getContext()));
         rvOrders.setAdapter(adapter);
 
