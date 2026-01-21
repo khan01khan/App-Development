@@ -31,12 +31,9 @@ A comprehensive Android application built with Java to streamline restaurant ope
 
 | Member | Role | Responsibilities |
 | :--- | :--- | :--- |
-| **Team Leader** | Backend & Notifications | Order Management logic, Firebase integration, Pop Notifications, and Admin/User Dashboards logic. |
-| **Member 2** | Frontend Designer | UI/UX design, XML Layouts, Navigation Drawer, and responsive themes. |
-| **Member 3** | Core Functionalities | Firebase Auth (Login/Signup), Menu logic, Category filtering, and Cart system. |
-
+| **Wajeeha Naz (232202028)** | Team Leader | Backend, Firebase Integration, Pop Notifications & Order Management. |
+| **Zoya Gul (232202050)** | Frontend Designer | UI/UX design, XML Layouts, Navigation & Themes. |
+| **Minahil Shujah Satti (232202049)** | Core Logic | Firebase Auth, Menu filtering & Cart system logic. |
 
 ## 🎓 Academic Project
 Developed as part of the Mobile Application Development course.
-
-
